@@ -33,14 +33,25 @@ public class blub {
                 vomit();
             } else if (user_input.matches("mark \\d+")) {
                 mark(Integer.parseInt(user_input.substring(5)) - 1);
+            } else if (user_input.equals("todo")) {
+                System.out.println("Error: The description of a todo cannot be empty.");
             } else if (user_input.startsWith("todo ")) {
-                addTodo(user_input.substring(5));
+                String description = user_input.substring(5).trim();
+                if (description.isEmpty()) {
+                    System.out.println("Error: The description of a todo cannot be empty.");
+                } else {
+                    addTodo(description);
+                }
+            } else if (user_input.equals("deadline")) {
+                System.out.println("Error: The description of a deadline cannot be empty.");
             } else if (user_input.startsWith("deadline ")) {
                 addDeadline(user_input.substring(9));
+            } else if (user_input.equals("event")) {
+                System.out.println("Error: The description of an event cannot be empty.");
             } else if (user_input.startsWith("event ")) {
                 addEvent(user_input.substring(6));
             } else {
-                System.out.println("Unknown command");
+                System.out.println("Error: I'm sorry, but I don't know what that means.");
             }
 
         }
@@ -57,9 +68,21 @@ public class blub {
     }
 
     public static void addDeadline(String input) {
+        if (!input.contains(" /by ")) {
+            System.out.println("Error: Please specify a deadline using /by.");
+            return;
+        }
         String[] parts = input.split(" /by ");
-        String description = parts[0];
-        String by = parts[1];
+        String description = parts[0].trim();
+        if (description.isEmpty()) {
+            System.out.println("Error: The description of a deadline cannot be empty.");
+            return;
+        }
+        String by = parts[1].trim();
+        if (by.isEmpty()) {
+            System.out.println("Error: The deadline date/time cannot be empty.");
+            return;
+        }
         Task task = new Deadline(description, by);
         bot_brain.add(task);
         System.out.println("Got it. I've added this task:");
@@ -68,11 +91,27 @@ public class blub {
     }
 
     public static void addEvent(String input) {
+        if (!input.contains(" /from ")) {
+            System.out.println("Error: Please specify event start time using /from.");
+            return;
+        }
+        if (!input.contains(" /to ")) {
+            System.out.println("Error: Please specify event end time using /to.");
+            return;
+        }
         String[] parts = input.split(" /from ");
-        String description = parts[0];
+        String description = parts[0].trim();
+        if (description.isEmpty()) {
+            System.out.println("Error: The description of an event cannot be empty.");
+            return;
+        }
         String[] timeParts = parts[1].split(" /to ");
-        String from = timeParts[0];
-        String to = timeParts[1];
+        String from = timeParts[0].trim();
+        String to = timeParts[1].trim();
+        if (from.isEmpty() || to.isEmpty()) {
+            System.out.println("Error: Event start and end times cannot be empty.");
+            return;
+        }
         Task task = new Event(description, from, to);
         bot_brain.add(task);
         System.out.println("Got it. I've added this task:");
