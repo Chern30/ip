@@ -3,10 +3,8 @@ import java.util.Scanner;
 
 public class blub {
 
-    public record Pair(String x, String y) {}
-
     static String bot_name = "Blub";
-    static ArrayList<Pair> bot_brain = new java.util.ArrayList<Pair>();
+    static ArrayList<Task> bot_brain = new ArrayList<Task>();
 
     public static void main(String[] args) {
         sayHi();
@@ -38,8 +36,14 @@ public class blub {
                 vomit();
             } else if (user_input.matches("mark \\d+")) {
                 mark(Integer.parseInt(user_input.substring(5)) - 1);
+            } else if (user_input.startsWith("todo ")) {
+                addTodo(user_input.substring(5));
+            } else if (user_input.startsWith("deadline ")) {
+                addDeadline(user_input.substring(9));
+            } else if (user_input.startsWith("event ")) {
+                addEvent(user_input.substring(6));
             } else {
-                add(user_input);
+                System.out.println("Unknown command");
             }
 
             System.out.println("\n");
@@ -48,56 +52,49 @@ public class blub {
         sc.close();
     }
 
-    // public static void echo() {
-    //     Scanner sc = new Scanner(System.in);
+    public static void addTodo(String description) {
+        Task task = new Todo(description);
+        bot_brain.add(task);
+        System.out.println("Got it. I've added this task:");
+        System.out.println("  " + task);
+        System.out.println("Now you have " + bot_brain.size() + " tasks in the list.");
+    }
 
-    //     while (true) {
-    //         String user_input = sc.nextLine();
+    public static void addDeadline(String input) {
+        String[] parts = input.split(" /by ");
+        String description = parts[0];
+        String by = parts[1];
+        Task task = new Deadline(description, by);
+        bot_brain.add(task);
+        System.out.println("Got it. I've added this task:");
+        System.out.println("  " + task);
+        System.out.println("Now you have " + bot_brain.size() + " tasks in the list.");
+    }
 
-    //         if (user_input.equals("bye")) {
-    //             break;
-    //         }
-
-    //         System.out.println(user_input);
-    //     }
-
-    //     sc.close();
-    // }
-
-    // public static void accumulate() {
-    //     Scanner sc = new Scanner(System.in);
-
-    //     while (true) {
-    //         String user_input = sc.nextLine();
-
-    //         if (user_input.equals("list")) {
-    //             vomit();
-    //             break;
-    //         }
-
-    //         bot_brain.add(user_input);
-    //         System.out.println("added: " + user_input);
-    //     }
-
-    //     sc.close();
-    // }
-
-    public static void add(String user_input) {
-        bot_brain.add(new Pair( " ", user_input));
-        System.out.println("added: " + user_input);
+    public static void addEvent(String input) {
+        String[] parts = input.split(" /from ");
+        String description = parts[0];
+        String[] timeParts = parts[1].split(" /to ");
+        String from = timeParts[0];
+        String to = timeParts[1];
+        Task task = new Event(description, from, to);
+        bot_brain.add(task);
+        System.out.println("Got it. I've added this task:");
+        System.out.println("  " + task);
+        System.out.println("Now you have " + bot_brain.size() + " tasks in the list.");
     }
 
     public static void vomit() {
         for (int i = 0; i < bot_brain.size(); i++) {
-            Pair found = bot_brain.get(i);
-            System.out.println((i + 1) + ". [" + found.x() + "] " + found.y());
+            Task task = bot_brain.get(i);
+            System.out.println((i + 1) + ". " + task);
         }
     }
 
     public static void mark(int index) {
-        Pair old_record = bot_brain.get(index);
-        bot_brain.set(index, new Pair("X", old_record.y()));
+        Task task = bot_brain.get(index);
+        task.markAsDone();
         System.out.println("Nice I have marked this task as done");
-        System.out.println("[X] " + old_record.y());
+        System.out.println(task);
     }
 }
