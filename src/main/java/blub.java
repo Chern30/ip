@@ -9,7 +9,6 @@ public class blub {
     public static void main(String[] args) {
         sayHi();
         accumulate();
-        vomit();
         sayBye();
 
     }
@@ -48,17 +47,21 @@ public class blub {
         while (true) {
             String user_input = sc.nextLine();
 
-            if (user_input.equals("bye")) {
+            if (user_input.equals("list")) {
+                vomit();
                 break;
             }
 
             bot_brain.add(user_input);
+            System.out.println("added: " + user_input);
         }
 
         sc.close();
     }
 
     public static void vomit() {
+
+        System.out.println("\n")
         for (int i = 0; i < bot_brain.size(); i++) {
             System.out.println((i + 1) + ". " + bot_brain.get(i));
         }
