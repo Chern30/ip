@@ -8,6 +8,7 @@ public class blub {
 
     public static void main(String[] args) {
         sayHi();
+        echo();
         sayBye();
 
     }
