@@ -13,15 +13,12 @@ public class blub {
     }
 
     public static void sayHi() {
-        String welcome_message =
-                "Hello! I am " + bot_name + "\n" +
-                "What can I do you for \n\n";
-        System.out.println(welcome_message);
+        System.out.println("Hello! I am " + bot_name);
+        System.out.println("What can I do for you?");
     }
 
     public static void sayBye() {
-        String bye_message = "Bye. Hope to see you again soon!\n";
-        System.out.println(bye_message);
+        System.out.println("Bye. Hope to see you again soon!");
     }
 
     public static void converse() {
@@ -46,7 +43,6 @@ public class blub {
                 System.out.println("Unknown command");
             }
 
-            System.out.println("\n");
         }
 
         sc.close();
@@ -85,6 +81,7 @@ public class blub {
     }
 
     public static void vomit() {
+        System.out.println("Here are the tasks in your list:");
         for (int i = 0; i < bot_brain.size(); i++) {
             Task task = bot_brain.get(i);
             System.out.println((i + 1) + ". " + task);
@@ -94,7 +91,7 @@ public class blub {
     public static void mark(int index) {
         Task task = bot_brain.get(index);
         task.markAsDone();
-        System.out.println("Nice I have marked this task as done");
-        System.out.println(task);
+        System.out.println("Nice! I've marked this task as done:");
+        System.out.println("  " + task);
     }
 }
