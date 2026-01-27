@@ -27,39 +27,34 @@ public class blub {
         while (true) {
             String user_input = sc.nextLine();
 
-            if (user_input.equals("bye")) {
-                break;
-            } else if (user_input.equals("list")) {
-                vomit();
-            } else if (user_input.matches("mark \\d+")) {
-                mark(Integer.parseInt(user_input.substring(5)) - 1);
-            } else if (user_input.equals("todo")) {
-                System.out.println("Error: The description of a todo cannot be empty.");
-            } else if (user_input.startsWith("todo ")) {
-                String description = user_input.substring(5).trim();
-                if (description.isEmpty()) {
-                    System.out.println("Error: The description of a todo cannot be empty.");
+            try {
+                if (user_input.equals("bye")) {
+                    break;
+                } else if (user_input.equals("list")) {
+                    vomit();
+                } else if (user_input.matches("mark \\d+")) {
+                    mark(Integer.parseInt(user_input.substring(5)) - 1);
+                } else if (user_input.equals("todo") || user_input.startsWith("todo ")) {
+                    addTodo(user_input.substring(4).trim());
+                } else if (user_input.equals("deadline") || user_input.startsWith("deadline ")) {
+                    addDeadline(user_input.substring(8).trim());
+                } else if (user_input.equals("event") || user_input.startsWith("event ")) {
+                    addEvent(user_input.substring(5).trim());
                 } else {
-                    addTodo(description);
+                    throw new BlubException("I'm sorry, but I don't know what that means.");
                 }
-            } else if (user_input.equals("deadline")) {
-                System.out.println("Error: The description of a deadline cannot be empty.");
-            } else if (user_input.startsWith("deadline ")) {
-                addDeadline(user_input.substring(9));
-            } else if (user_input.equals("event")) {
-                System.out.println("Error: The description of an event cannot be empty.");
-            } else if (user_input.startsWith("event ")) {
-                addEvent(user_input.substring(6));
-            } else {
-                System.out.println("Error: I'm sorry, but I don't know what that means.");
+            } catch (BlubException e) {
+                System.out.println("Error: " + e.getMessage());
             }
-
         }
 
         sc.close();
     }
 
-    public static void addTodo(String description) {
+    public static void addTodo(String description) throws BlubException {
+        if (description.isEmpty()) {
+            throw new BlubException("The description of a todo cannot be empty.");
+        }
         Task task = new Todo(description);
         bot_brain.add(task);
         System.out.println("Got it. I've added this task:");
@@ -67,21 +62,21 @@ public class blub {
         System.out.println("Now you have " + bot_brain.size() + " tasks in the list.");
     }
 
-    public static void addDeadline(String input) {
+    public static void addDeadline(String input) throws BlubException {
+        if (input.isEmpty()) {
+            throw new BlubException("The description of a deadline cannot be empty.");
+        }
         if (!input.contains(" /by ")) {
-            System.out.println("Error: Please specify a deadline using /by.");
-            return;
+            throw new BlubException("Please specify a deadline using /by.");
         }
         String[] parts = input.split(" /by ");
         String description = parts[0].trim();
         if (description.isEmpty()) {
-            System.out.println("Error: The description of a deadline cannot be empty.");
-            return;
+            throw new BlubException("The description of a deadline cannot be empty.");
         }
         String by = parts[1].trim();
         if (by.isEmpty()) {
-            System.out.println("Error: The deadline date/time cannot be empty.");
-            return;
+            throw new BlubException("The deadline date/time cannot be empty.");
         }
         Task task = new Deadline(description, by);
         bot_brain.add(task);
@@ -90,27 +85,26 @@ public class blub {
         System.out.println("Now you have " + bot_brain.size() + " tasks in the list.");
     }
 
-    public static void addEvent(String input) {
+    public static void addEvent(String input) throws BlubException {
+        if (input.isEmpty()) {
+            throw new BlubException("The description of an event cannot be empty.");
+        }
         if (!input.contains(" /from ")) {
-            System.out.println("Error: Please specify event start time using /from.");
-            return;
+            throw new BlubException("Please specify event start time using /from.");
         }
         if (!input.contains(" /to ")) {
-            System.out.println("Error: Please specify event end time using /to.");
-            return;
+            throw new BlubException("Please specify event end time using /to.");
         }
         String[] parts = input.split(" /from ");
         String description = parts[0].trim();
         if (description.isEmpty()) {
-            System.out.println("Error: The description of an event cannot be empty.");
-            return;
+            throw new BlubException("The description of an event cannot be empty.");
         }
         String[] timeParts = parts[1].split(" /to ");
         String from = timeParts[0].trim();
         String to = timeParts[1].trim();
         if (from.isEmpty() || to.isEmpty()) {
-            System.out.println("Error: Event start and end times cannot be empty.");
-            return;
+            throw new BlubException("Event start and end times cannot be empty.");
         }
         Task task = new Event(description, from, to);
         bot_brain.add(task);
