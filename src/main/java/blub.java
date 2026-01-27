@@ -34,6 +34,8 @@ public class blub {
                     vomit();
                 } else if (user_input.matches("mark \\d+")) {
                     mark(Integer.parseInt(user_input.substring(5)) - 1);
+                } else if (user_input.matches("delete \\d+")) {
+                    delete(Integer.parseInt(user_input.substring(7)) - 1);
                 } else if (user_input.equals("todo") || user_input.startsWith("todo ")) {
                     addTodo(user_input.substring(4).trim());
                 } else if (user_input.equals("deadline") || user_input.startsWith("deadline ")) {
@@ -126,5 +128,12 @@ public class blub {
         task.markAsDone();
         System.out.println("Nice! I've marked this task as done:");
         System.out.println("  " + task);
+    }
+
+    public static void delete(int index) {
+        Task task = bot_brain.remove(index);
+        System.out.println("Noted. I've removed this task:");
+        System.out.println("  " + task);
+        System.out.println("Now you have " + bot_brain.size() + " tasks in the list.");
     }
 }
