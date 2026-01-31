@@ -56,30 +56,20 @@ public class blub {
 
     public static void converse() {
         while (true) {
-            String user_input = ui.readCommand();
-
+            String userInput = ui.readCommand();
             try {
-                if (user_input.equals("bye")) {
+                boolean isExit = Parser.parse(userInput);
+                if (isExit) {
                     break;
-                } else if (user_input.equals("list")) {
-                    ui.sendMessage(taskListMsg());
-                } else if (user_input.matches("mark \\d+")) {
-                    mark(Integer.parseInt(user_input.substring(5)) - 1);
-                } else if (user_input.matches("delete \\d+")) {
-                    delete(Integer.parseInt(user_input.substring(7)) - 1);
-                } else if (user_input.equals("todo") || user_input.startsWith("todo ")) {
-                    addTodo(user_input.substring(4).trim());
-                } else if (user_input.equals("deadline") || user_input.startsWith("deadline ")) {
-                    addDeadline(user_input.substring(8).trim());
-                } else if (user_input.equals("event") || user_input.startsWith("event ")) {
-                    addEvent(user_input.substring(5).trim());
-                } else {
-                    throw new BlubException("I'm sorry, but I don't know what that means.");
                 }
             } catch (BlubException e) {
                 ui.sendMessage("Error: " + e.getMessage());
             }
         }
+    }
+
+    public static void list() {
+        ui.sendMessage(taskListMsg());
     }
 
     public static void addTodo(String description) throws BlubException {
