@@ -1,4 +1,4 @@
-public class Task {
+public abstract class Task {
     private String description;
     private boolean isDone;
     private TaskType type;
@@ -17,6 +17,10 @@ public class Task {
         return (isDone ? "X" : " ");
     }
 
+    public boolean isDone() {
+        return isDone;
+    }
+
     public void markAsDone() {
         this.isDone = true;
     }
@@ -24,6 +28,8 @@ public class Task {
     public String getDescription() {
         return description;
     }
+
+    public abstract String toFileString();
 
     @Override
     public String toString() {

@@ -10,6 +10,11 @@ public class Event extends Task {
     }
 
     @Override
+    public String toFileString() {
+        return "E | " + (isDone() ? "1" : "0") + " | " + getDescription() + " | " + start + " | " + end;
+    }
+
+    @Override
     public String toString() {
         return super.toString() + " (from: " + this.start + " to: " + this.end + ")";
     }
