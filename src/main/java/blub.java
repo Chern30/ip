@@ -1,23 +1,22 @@
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class blub {
 
     static String bot_name = "Blub";
-    static ArrayList<Task> bot_brain = new ArrayList<Task>();
+    static TaskList taskList = new TaskList();
     static Ui ui = new Ui();
     static Storage storage = new Storage("data/tasks.txt");
 
     public static void main(String[] args) {
         try {
-            bot_brain = storage.load();
+            taskList = new TaskList(storage.load());
         } catch (IOException e) {
             ui.sendMessage("Error reading from file: " + e.getMessage());
         }
         ui.sendMessage(hiMsg());
         converse();
         try {
-            storage.save(bot_brain);
+            storage.save(taskList.getTasks());
         } catch (IOException e) {
             ui.sendMessage("Error writing to file: " + e.getMessage());
         }
@@ -34,7 +33,7 @@ public class blub {
 
     private static String taskAddedMsg(Task task) {
         return "Got it. I've added this task:\n  " + task
-                + "\nNow you have " + bot_brain.size() + " tasks in the list.";
+                + "\nNow you have " + taskList.size() + " tasks in the list.";
     }
 
     private static String taskMarkedMsg(Task task) {
@@ -43,13 +42,13 @@ public class blub {
 
     private static String taskDeletedMsg(Task task) {
         return "Noted. I've removed this task:\n  " + task
-                + "\nNow you have " + bot_brain.size() + " tasks in the list.";
+                + "\nNow you have " + taskList.size() + " tasks in the list.";
     }
 
     private static String taskListMsg() {
         StringBuilder sb = new StringBuilder("Here are the tasks in your list:");
-        for (int i = 0; i < bot_brain.size(); i++) {
-            sb.append("\n").append(i + 1).append(". ").append(bot_brain.get(i));
+        for (int i = 0; i < taskList.size(); i++) {
+            sb.append("\n").append(i + 1).append(". ").append(taskList.get(i));
         }
         return sb.toString();
     }
@@ -73,70 +72,27 @@ public class blub {
     }
 
     public static void addTodo(String description) throws BlubException {
-        if (description.isEmpty()) {
-            throw new BlubException("The description of a todo cannot be empty.");
-        }
-        Task task = new Todo(description);
-        bot_brain.add(task);
-        ui.sendMessage(taskAddedMsg(task));
+        taskList.addTodo(description);
+        ui.sendMessage(taskAddedMsg(taskList.get(taskList.size() - 1)));
     }
 
     public static void addDeadline(String input) throws BlubException {
-        if (input.isEmpty()) {
-            throw new BlubException("The description of a deadline cannot be empty.");
-        }
-        if (!input.contains(" /by ")) {
-            throw new BlubException("Please specify a deadline using /by.");
-        }
-        String[] parts = input.split(" /by ");
-        String description = parts[0].trim();
-        if (description.isEmpty()) {
-            throw new BlubException("The description of a deadline cannot be empty.");
-        }
-        String by = parts[1].trim();
-        if (by.isEmpty()) {
-            throw new BlubException("The deadline date/time cannot be empty.");
-        }
-        Task task = new Deadline(description, by);
-        bot_brain.add(task);
-        ui.sendMessage(taskAddedMsg(task));
+        taskList.addDeadline(input);
+        ui.sendMessage(taskAddedMsg(taskList.get(taskList.size() - 1)));
     }
 
     public static void addEvent(String input) throws BlubException {
-        if (input.isEmpty()) {
-            throw new BlubException("The description of an event cannot be empty.");
-        }
-        if (!input.contains(" /from ")) {
-            throw new BlubException("Please specify event start time using /from.");
-        }
-        if (!input.contains(" /to ")) {
-            throw new BlubException("Please specify event end time using /to.");
-        }
-        String[] parts = input.split(" /from ");
-        String description = parts[0].trim();
-        if (description.isEmpty()) {
-            throw new BlubException("The description of an event cannot be empty.");
-        }
-        String[] timeParts = parts[1].split(" /to ");
-        String from = timeParts[0].trim();
-        String to = timeParts[1].trim();
-        if (from.isEmpty() || to.isEmpty()) {
-            throw new BlubException("Event start and end times cannot be empty.");
-        }
-        Task task = new Event(description, from, to);
-        bot_brain.add(task);
-        ui.sendMessage(taskAddedMsg(task));
+        taskList.addEvent(input);
+        ui.sendMessage(taskAddedMsg(taskList.get(taskList.size() - 1)));
     }
 
     public static void mark(int index) {
-        Task task = bot_brain.get(index);
-        task.markAsDone();
-        ui.sendMessage(taskMarkedMsg(task));
+        taskList.mark(index);
+        ui.sendMessage(taskMarkedMsg(taskList.get(index)));
     }
 
     public static void delete(int index) {
-        Task task = bot_brain.remove(index);
+        Task task = taskList.delete(index);
         ui.sendMessage(taskDeletedMsg(task));
     }
-
 }
