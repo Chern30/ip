@@ -1,3 +1,5 @@
+package blub;
+
 public class Parser {
 
     public static boolean parse(String userInput) throws BlubException {

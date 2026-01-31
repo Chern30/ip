@@ -1,3 +1,7 @@
+package blub;
+
+import blub.task.*;
+
 import java.util.ArrayList;
 
 public class TaskList {

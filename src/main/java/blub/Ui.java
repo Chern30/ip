@@ -1,3 +1,5 @@
+package blub;
+
 import java.util.Scanner;
 
 public class Ui {

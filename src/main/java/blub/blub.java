@@ -1,3 +1,7 @@
+package blub;
+
+import blub.task.Task;
+
 import java.io.IOException;
 
 public class blub {
