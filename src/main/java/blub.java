@@ -9,35 +9,55 @@ public class blub {
     static String bot_name = "Blub";
     static ArrayList<Task> bot_brain = new ArrayList<Task>();
     static String FILE_PATH = "src/main/data/tasks.txt";
+    static Ui ui = new Ui();
 
     public static void main(String[] args) {
         readFromFile();
-        sayHi();
+        ui.sendMessage(hiMsg());
         converse();
         writeToFile();
-        sayBye();
+        ui.sendMessage(byeMsg());
     }
 
-    public static void sayHi() {
-        System.out.println("Hello! I am " + bot_name);
-        System.out.println("What can I do for you?");
+    private static String hiMsg() {
+        return "Hello! I am " + bot_name + "\nWhat can I do for you?";
     }
 
-    public static void sayBye() {
-        System.out.println("Bye. Hope to see you again soon!");
+    private static String byeMsg() {
+        return "Bye. Hope to see you again soon!";
+    }
+
+    private static String taskAddedMsg(Task task) {
+        return "Got it. I've added this task:\n  " + task
+                + "\nNow you have " + bot_brain.size() + " tasks in the list.";
+    }
+
+    private static String taskMarkedMsg(Task task) {
+        return "Nice! I've marked this task as done:\n  " + task;
+    }
+
+    private static String taskDeletedMsg(Task task) {
+        return "Noted. I've removed this task:\n  " + task
+                + "\nNow you have " + bot_brain.size() + " tasks in the list.";
+    }
+
+    private static String taskListMsg() {
+        StringBuilder sb = new StringBuilder("Here are the tasks in your list:");
+        for (int i = 0; i < bot_brain.size(); i++) {
+            sb.append("\n").append(i + 1).append(". ").append(bot_brain.get(i));
+        }
+        return sb.toString();
     }
 
     public static void converse() {
-        Scanner sc = new Scanner(System.in);
-
         while (true) {
-            String user_input = sc.nextLine();
+            String user_input = ui.readCommand();
 
             try {
                 if (user_input.equals("bye")) {
                     break;
                 } else if (user_input.equals("list")) {
-                    vomit();
+                    ui.sendMessage(taskListMsg());
                 } else if (user_input.matches("mark \\d+")) {
                     mark(Integer.parseInt(user_input.substring(5)) - 1);
                 } else if (user_input.matches("delete \\d+")) {
@@ -52,11 +72,9 @@ public class blub {
                     throw new BlubException("I'm sorry, but I don't know what that means.");
                 }
             } catch (BlubException e) {
-                System.out.println("Error: " + e.getMessage());
+                ui.sendMessage("Error: " + e.getMessage());
             }
         }
-
-        sc.close();
     }
 
     public static void addTodo(String description) throws BlubException {
@@ -65,9 +83,7 @@ public class blub {
         }
         Task task = new Todo(description);
         bot_brain.add(task);
-        System.out.println("Got it. I've added this task:");
-        System.out.println("  " + task);
-        System.out.println("Now you have " + bot_brain.size() + " tasks in the list.");
+        ui.sendMessage(taskAddedMsg(task));
     }
 
     public static void addDeadline(String input) throws BlubException {
@@ -88,9 +104,7 @@ public class blub {
         }
         Task task = new Deadline(description, by);
         bot_brain.add(task);
-        System.out.println("Got it. I've added this task:");
-        System.out.println("  " + task);
-        System.out.println("Now you have " + bot_brain.size() + " tasks in the list.");
+        ui.sendMessage(taskAddedMsg(task));
     }
 
     public static void addEvent(String input) throws BlubException {
@@ -116,32 +130,18 @@ public class blub {
         }
         Task task = new Event(description, from, to);
         bot_brain.add(task);
-        System.out.println("Got it. I've added this task:");
-        System.out.println("  " + task);
-        System.out.println("Now you have " + bot_brain.size() + " tasks in the list.");
-    }
-
-    public static void vomit() {
-        System.out.println("Here are the tasks in your list:");
-        for (int i = 0; i < bot_brain.size(); i++) {
-            Task task = bot_brain.get(i);
-            System.out.println((i + 1) + ". " + task);
-        }
+        ui.sendMessage(taskAddedMsg(task));
     }
 
     public static void mark(int index) {
         Task task = bot_brain.get(index);
         task.markAsDone();
-        System.out.println("Nice! I've marked this task as done:");
-        System.out.println("  " + task);
+        ui.sendMessage(taskMarkedMsg(task));
     }
 
     public static void delete(int index) {
         Task task = bot_brain.remove(index);
-        System.out.println("Noted. I've removed this task:");
-        System.out.println("  " + task);
-        System.out.println("Now you have " + bot_brain.size() + " tasks in the list.");
-        writeToFile();
+        ui.sendMessage(taskDeletedMsg(task));
     }
 
     public static void writeToFile() {
@@ -154,7 +154,7 @@ public class blub {
             }
             fw.close();
         } catch (IOException e) {
-            System.out.println("Error writing to file: " + e.getMessage());
+            ui.sendMessage("Error writing to file: " + e.getMessage());
         }
     }
 
@@ -191,7 +191,7 @@ public class blub {
             }
             sc.close();
         } catch (IOException e) {
-            System.out.println("Error reading from file: " + e.getMessage());
+            ui.sendMessage("Error reading from file: " + e.getMessage());
         }
     }
 }
