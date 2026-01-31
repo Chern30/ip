@@ -1,21 +1,26 @@
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class blub {
 
     static String bot_name = "Blub";
     static ArrayList<Task> bot_brain = new ArrayList<Task>();
-    static String FILE_PATH = "src/main/data/tasks.txt";
     static Ui ui = new Ui();
+    static Storage storage = new Storage("data/tasks.txt");
 
     public static void main(String[] args) {
-        readFromFile();
+        try {
+            bot_brain = storage.load();
+        } catch (IOException e) {
+            ui.sendMessage("Error reading from file: " + e.getMessage());
+        }
         ui.sendMessage(hiMsg());
         converse();
-        writeToFile();
+        try {
+            storage.save(bot_brain);
+        } catch (IOException e) {
+            ui.sendMessage("Error writing to file: " + e.getMessage());
+        }
         ui.sendMessage(byeMsg());
     }
 
@@ -144,54 +149,4 @@ public class blub {
         ui.sendMessage(taskDeletedMsg(task));
     }
 
-    public static void writeToFile() {
-        try {
-            File file = new File(FILE_PATH);
-            file.getParentFile().mkdirs();
-            FileWriter fw = new FileWriter(file);
-            for (Task task : bot_brain) {
-                fw.write(task.toFileString() + System.lineSeparator());
-            }
-            fw.close();
-        } catch (IOException e) {
-            ui.sendMessage("Error writing to file: " + e.getMessage());
-        }
-    }
-
-    public static void readFromFile() {
-        File file = new File(FILE_PATH);
-        if (!file.exists()) {
-            return;
-        }
-        try {
-            Scanner sc = new Scanner(file);
-            while (sc.hasNextLine()) {
-                String line = sc.nextLine();
-                String[] parts = line.split(" \\| ");
-                String type = parts[0];
-                boolean isDone = parts[1].equals("1");
-                Task task;
-                switch (type) {
-                case "T":
-                    task = new Todo(parts[2]);
-                    break;
-                case "D":
-                    task = new Deadline(parts[2], parts[3]);
-                    break;
-                case "E":
-                    task = new Event(parts[2], parts[3], parts[4]);
-                    break;
-                default:
-                    continue;
-                }
-                if (isDone) {
-                    task.markAsDone();
-                }
-                bot_brain.add(task);
-            }
-            sc.close();
-        } catch (IOException e) {
-            ui.sendMessage("Error reading from file: " + e.getMessage());
-        }
-    }
 }
