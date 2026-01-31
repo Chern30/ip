@@ -1,10 +1,23 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 public class Deadline extends Task {
 
     private String deadline;
 
     public Deadline(String description, String deadline) {
         super(description, TaskType.DEADLINE);
-        this.deadline = deadline;
+        this.deadline = handleDate(deadline);
+    }
+
+    private static String handleDate(String date) {
+        try {
+            LocalDate parsed = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            return parsed.format(DateTimeFormatter.ofPattern("MMM dd yyyy"));
+        } catch (DateTimeParseException e) {
+            return date;
+        }
     }
 
     @Override
