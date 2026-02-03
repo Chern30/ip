@@ -100,4 +100,16 @@ public class blub {
         Task task = taskList.delete(index);
         ui.sendMessage(taskDeletedMsg(task));
     }
+
+    public static void find(String keyword) throws BlubException {
+        if (keyword.isEmpty()) {
+            throw new BlubException("Please specify a keyword to search for.");
+        }
+        java.util.ArrayList<Task> matchingTasks = taskList.filterTasks(keyword);
+        StringBuilder sb = new StringBuilder("Here are the matching tasks in your list:");
+        for (int i = 0; i < matchingTasks.size(); i++) {
+            sb.append("\n").append(i + 1).append(". ").append(matchingTasks.get(i));
+        }
+        ui.sendMessage(sb.toString());
+    }
 }

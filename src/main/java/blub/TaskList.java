@@ -99,4 +99,14 @@ public class TaskList {
     public Task delete(int index) {
         return tasks.remove(index);
     }
+
+    public ArrayList<Task> filterTasks(String substring) {
+        ArrayList<Task> filteredTasks = new ArrayList<>();
+        for (Task task : tasks) {
+            if (task.getDescription().contains(substring)) {
+                filteredTasks.add(task);
+            }
+        }
+        return filteredTasks;
+    }
 }

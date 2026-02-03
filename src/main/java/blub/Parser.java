@@ -18,6 +18,8 @@ public class Parser {
             blub.addDeadline(userInput.substring(8).trim());
         } else if (userInput.equals("event") || userInput.startsWith("event ")) {
             blub.addEvent(userInput.substring(5).trim());
+        } else if (userInput.equals("find") || userInput.startsWith("find ")) {
+            blub.find(userInput.substring(4).trim());
         } else {
             throw new BlubException("I'm sorry, but I don't know what that means.");
         }
