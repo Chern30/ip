@@ -11,11 +11,13 @@ public class Event extends Task {
         this.end = end;
     }
 
+    // Convert Event to storable file format
     @Override
     public String toFileString() {
         return "E | " + (isDone() ? "1" : "0") + " | " + getDescription() + " | " + start + " | " + end;
     }
 
+    // Convert Event to String
     @Override
     public String toString() {
         return super.toString() + " (from: " + this.start + " to: " + this.end + ")";

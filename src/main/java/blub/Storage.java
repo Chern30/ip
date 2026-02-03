@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+// Abstraction of the file storage functions, such as storing and retrieving from store
 public class Storage {
 
     private final String filePath;

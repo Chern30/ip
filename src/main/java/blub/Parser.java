@@ -1,5 +1,6 @@
 package blub;
 
+// Abstraction of parser to decode commands in string, to what functions should be called
 public class Parser {
 
     public static boolean parse(String userInput) throws BlubException {

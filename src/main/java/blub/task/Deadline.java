@@ -8,6 +8,7 @@ public class Deadline extends Task {
 
     private String deadline;
 
+    // Create Deadline
     public Deadline(String description, String deadline) {
         super(description, TaskType.DEADLINE);
         this.deadline = handleDate(deadline);
@@ -22,11 +23,13 @@ public class Deadline extends Task {
         }
     }
 
+    // Convert Deadline to storable file format
     @Override
     public String toFileString() {
         return "D | " + (isDone() ? "1" : "0") + " | " + getDescription() + " | " + deadline;
     }
 
+    // Convert Deadline to String
     @Override
     public String toString() {
         return super.toString() + " (by: " + this.deadline + ")";

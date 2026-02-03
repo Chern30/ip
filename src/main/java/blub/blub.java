@@ -4,6 +4,7 @@ import blub.task.Task;
 
 import java.io.IOException;
 
+// Main Class
 public class blub {
 
     static String bot_name = "Blub";

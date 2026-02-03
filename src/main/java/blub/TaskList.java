@@ -4,26 +4,32 @@ import blub.task.*;
 
 import java.util.ArrayList;
 
+// Abstraction of Tasklist, which stores the existing list of tasks
 public class TaskList {
 
     private final ArrayList<Task> tasks;
 
+    // Initialise
     public TaskList() {
         this.tasks = new ArrayList<>();
     }
 
+    // Initialise when with existing list
     public TaskList(ArrayList<Task> tasks) {
         this.tasks = tasks;
     }
 
+    // Get all tasks
     public ArrayList<Task> getTasks() {
         return tasks;
     }
 
+    // Get number of tasks
     public int size() {
         return tasks.size();
     }
 
+    // Get Task at given index
     public Task get(int index) {
         return tasks.get(index);
     }
