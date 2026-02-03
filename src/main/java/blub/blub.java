@@ -7,7 +7,7 @@ import java.io.IOException;
 // Main Class
 public class blub {
 
-    static String bot_name = "Blub";
+    static String botName = "Blub";
     static TaskList taskList = new TaskList();
     static Ui ui = new Ui();
     static Storage storage = new Storage("data/tasks.txt");
@@ -29,7 +29,7 @@ public class blub {
     }
 
     private static String hiMsg() {
-        return "Hello! I am " + bot_name + "\nWhat can I do for you?";
+        return "Hello! I am " + botName + "\nWhat can I do for you?";
     }
 
     private static String byeMsg() {
