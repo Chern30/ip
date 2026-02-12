@@ -1,8 +1,11 @@
 package blub;
 
+import blub.gui.Gui;
 import blub.task.Task;
 
 import java.io.IOException;
+
+import javafx.application.Application;
 
 // Main Class
 public class blub {
@@ -12,20 +15,37 @@ public class blub {
     static Ui ui = new Ui();
     static Storage storage = new Storage("data/tasks.txt");
 
-    public static void main(String[] args) {
+    public blub() {
         try {
             taskList = new TaskList(storage.load());
         } catch (IOException e) {
-            ui.sendMessage("Error reading from file: " + e.getMessage());
+            taskList = new TaskList();
         }
-        ui.sendMessage(hiMsg());
-        converse();
+    }
+
+    public String getResponse(String userInput) {
         try {
-            storage.save(taskList.getTasks());
-        } catch (IOException e) {
-            ui.sendMessage("Error writing to file: " + e.getMessage());
+            boolean isExit = Parser.parse(userInput);
+            if (isExit) {
+                try {
+                    storage.save(taskList.getTasks());
+                } catch (IOException e) {
+                    return "Error writing to file: " + e.getMessage();
+                }
+                return byeMsg();
+            }
+        } catch (BlubException e) {
+            return "Error: " + e.getMessage();
         }
-        ui.sendMessage(byeMsg());
+        return ui.getLastMessage();
+    }
+
+    public static void main(String[] args) {
+        Application.launch(Gui.class, args);
+    }
+
+    public String getWelcome() {
+        return hiMsg();
     }
 
     private static String hiMsg() {
@@ -56,20 +76,6 @@ public class blub {
             sb.append("\n").append(i + 1).append(". ").append(taskList.get(i));
         }
         return sb.toString();
-    }
-
-    public static void converse() {
-        while (true) {
-            String userInput = ui.readCommand();
-            try {
-                boolean isExit = Parser.parse(userInput);
-                if (isExit) {
-                    break;
-                }
-            } catch (BlubException e) {
-                ui.sendMessage("Error: " + e.getMessage());
-            }
-        }
     }
 
     public static void list() {
