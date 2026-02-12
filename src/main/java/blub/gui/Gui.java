@@ -23,8 +23,15 @@ public class Gui extends Application {
     private Scene scene;
     private blub bot;
 
-    private Image userImage = new Image(this.getClass().getResourceAsStream("/images/jassy.png"));
-    private Image blubImage = new Image(this.getClass().getResourceAsStream("/images/blub.png"));
+    private Image userImage;
+    private Image blubImage;
+
+    {
+        assert this.getClass().getResourceAsStream("/images/jassy.png") != null : "User image not found";
+        assert this.getClass().getResourceAsStream("/images/blub.png") != null : "Blub image not found";
+        userImage = new Image(this.getClass().getResourceAsStream("/images/jassy.png"));
+        blubImage = new Image(this.getClass().getResourceAsStream("/images/blub.png"));
+    }
 
     @Override
     public void start(Stage stage) {
