@@ -1,30 +1,6 @@
-# blub User Guide
+# Blub User Guide
 
-// Update the title above to match the actual product name
+I am an investor of Amazon, but stock go brrrr. See how much it is [HERE](https://finance.yahoo.com/quote/AMZN/?fr=sycsrp_catchall)
 
-// Product screenshot goes here
-
-// Product intro goes here
-
-## Adding deadlines
-
-// Describe the action and its outcome.
-
-// Give examples of usage
-
-Example: `keyword (optional arguments)`
-
-// A description of the expected outcome goes here
-
-```
-expected output
-```
-
-## Feature ABC
-
-// Feature details
-
-
-## Feature XYZ
-
-// Feature details
+Hope Andy Jassy can bring back the Bezos Charm. Hence this is a deadline tracker he could use.
+    ![UI of Blub](/docs/Ui.png)
