@@ -82,7 +82,12 @@ public class Gui extends Application {
                 DialogBox.getUserDialog(input, userImage),
                 DialogBox.getBlubDialog(response, blubImage)
         );
-        userInput.clear();
+        String prefillText = bot.getPrefillText();
+        if (prefillText != null) {
+            userInput.setText(prefillText);
+        } else {
+            userInput.clear();
+        }
         if (input.equals("bye")) {
             Platform.exit();
         }

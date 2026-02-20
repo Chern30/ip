@@ -33,6 +33,8 @@ public abstract class Task {
 
     public abstract String toFileString();
 
+    public abstract String toCommandString();
+
     @Override
     public String toString() {
         return type.getPrefix() + "[" + getStatusIcon() + "] " + description;

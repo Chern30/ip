@@ -17,6 +17,11 @@ public class Event extends Task {
         return "E | " + (isDone() ? "1" : "0") + " | " + getDescription() + " | " + start + " | " + end;
     }
 
+    @Override
+    public String toCommandString() {
+        return "event " + getDescription() + " /from " + start + " /to " + end;
+    }
+
     // Convert Event to String
     @Override
     public String toString() {

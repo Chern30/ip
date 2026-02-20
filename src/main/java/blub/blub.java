@@ -14,6 +14,7 @@ public class blub {
     static TaskList taskList = new TaskList();
     static Ui ui = new Ui();
     static Storage storage = new Storage("data/tasks.txt");
+    private static String prefillText = null;
 
     public blub() {
         try {
@@ -105,6 +106,21 @@ public class blub {
     public static void delete(int index) {
         Task task = taskList.delete(index);
         ui.sendMessage(taskDeletedMsg(task));
+    }
+
+    public String getPrefillText() {
+        String text = prefillText;
+        prefillText = null;
+        return text;
+    }
+
+    public static void edit(int index) {
+        Task task = taskList.get(index);
+        String commandString = task.toCommandString();
+        taskList.delete(index);
+        prefillText = commandString;
+        ui.sendMessage("Editing task:\n  " + task
+                + "\nI've removed it. Edit the command below and submit to re-create it.");
     }
 
     public static void find(String keyword) throws BlubException {

@@ -29,6 +29,11 @@ public class Deadline extends Task {
         return "D | " + (isDone() ? "1" : "0") + " | " + getDescription() + " | " + deadline;
     }
 
+    @Override
+    public String toCommandString() {
+        return "deadline " + getDescription() + " /by " + deadline;
+    }
+
     // Convert Deadline to String
     @Override
     public String toString() {

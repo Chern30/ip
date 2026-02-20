@@ -12,6 +12,8 @@ public class Parser {
             blub.mark(Integer.parseInt(userInput.substring(5)) - 1);
         } else if (userInput.matches("delete \\d+")) {
             blub.delete(Integer.parseInt(userInput.substring(7)) - 1);
+        } else if (userInput.matches("edit \\d+")) {
+            blub.edit(Integer.parseInt(userInput.substring(5)) - 1);
         } else if (userInput.equals("todo") || userInput.startsWith("todo ")) {
             blub.addTodo(userInput.substring(4).trim());
         } else if (userInput.equals("deadline") || userInput.startsWith("deadline ")) {
