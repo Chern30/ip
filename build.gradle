@@ -40,9 +40,17 @@ application {
     mainClass.set("blub.blub")
 }
 
+def linuxJfx = configurations.detachedConfiguration(
+    dependencies.create("org.openjfx:javafx-base:17:linux"),
+    dependencies.create("org.openjfx:javafx-controls:17:linux"),
+    dependencies.create("org.openjfx:javafx-fxml:17:linux"),
+    dependencies.create("org.openjfx:javafx-graphics:17:linux")
+)
+
 shadowJar {
     archiveBaseName = "blub"
     archiveClassifier = null
+    from linuxJfx.collect { zipTree(it) }
 }
 
 run{
