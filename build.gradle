@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'jacoco'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
     id 'org.openjfx.javafxplugin' version '0.0.13'
 }
@@ -16,6 +17,7 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
 
     testLogging {
         events "passed", "skipped", "failed"
@@ -25,6 +27,15 @@ test {
         showCauses true
         showStackTraces true
         showStandardStreams = false
+    }
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        html.required = true
+        xml.required = false
+        csv.required = false
     }
 }
 
